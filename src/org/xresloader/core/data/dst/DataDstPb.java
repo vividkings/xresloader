@@ -809,9 +809,9 @@ public class DataDstPb extends DataDstImpl {
         // 初始化header
         PbHeaderV3.xresloader_datablocks.Builder blocks = PbHeaderV3.xresloader_datablocks.newBuilder();
         PbHeaderV3.xresloader_header.Builder header = blocks.getHeaderBuilder();
-        header.setXresVer(ProgramOptions.getInstance().getVersion());
-        header.setDataVer(ProgramOptions.getInstance().getDataVersion());
-        header.setHashCode("");
+        header.setXresVer("0.0.1");
+//        header.setDataVer(ProgramOptions.getInstance().getDataVersion());
+//        header.setHashCode("");
         ArrayList<String> descriptionList = new ArrayList<String>();
 
         // 校验码
@@ -820,7 +820,7 @@ public class DataDstPb extends DataDstImpl {
             sha256 = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
             this.logErrorMessage("failed to find sha-256 algorithm.");
-            header.setHashCode("");
+//            header.setHashCode("");
         }
 
         // 数据
@@ -845,20 +845,20 @@ public class DataDstPb extends DataDstImpl {
                 descriptionList.add(desc.getMessageExtension().description);
             }
 
-            blocks.setDataMessageType(desc.getFullName());
+//            blocks.setDataMessageType(desc.getFullName());
 
-            PbHeaderV3.xresloader_data_source.Builder data_source = header.addDataSourceBuilder();
-            data_source.setFile(DataSrcImpl.getOurInstance().getCurrentFileName());
-            data_source.setSheet(DataSrcImpl.getOurInstance().getCurrentTableName());
+//            PbHeaderV3.xresloader_data_source.Builder data_source = header.addDataSourceBuilder();
+//            data_source.setFile(DataSrcImpl.getOurInstance().getCurrentFileName());
+//            data_source.setSheet(DataSrcImpl.getOurInstance().getCurrentTableName());
         }
 
         header.setCount(count);
         if (null != sha256) {
-            header.setHashCode("sha256:" + Hex.encodeHexString(sha256.digest()));
+//            header.setHashCode("sha256:" + Hex.encodeHexString(sha256.digest()));
         }
 
         if (!descriptionList.isEmpty()) {
-            header.setDescription(String.join(getSystemEndl(), descriptionList));
+//            header.setDescription(String.join(getSystemEndl(), descriptionList));
         }
 
         // 写出
