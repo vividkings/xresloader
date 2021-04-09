@@ -556,9 +556,9 @@ public class ExcelEngine {
                     val = dateToUnixTimestamp(c.getDateCellValue());
                 } else {
                     if (col.getRatio() == 1) {
-                        val = Math.round(cal_cell2num(c, cv));
+                        val = douebleToLong(cal_cell2num(c, cv));
                     } else {
-                        val = Math.round(cal_cell2num(c, cv) * col.getRatio());
+                        val = douebleToLong(cal_cell2num(c, cv) * col.getRatio());
                     }
                 }
 
@@ -826,5 +826,9 @@ public class ExcelEngine {
             return h * 3600 + m * 60 + s;
         }
         return d.getTime() / 1000;
+    }
+
+    static private long douebleToLong(double d) {
+        return (long) d;
     }
 }
