@@ -320,7 +320,7 @@ public class ExcelEngine {
      * @return
      */
     static public void cell2s(DataContainer<String> out, DataRowWrapper rowWrapper, IdentifyDescriptor col,
-            FormulaWrapper formula) {
+                              FormulaWrapper formula) {
         if (null == rowWrapper) {
             return;
         }
@@ -470,7 +470,7 @@ public class ExcelEngine {
      * @return
      */
     static public void cell2i(DataContainer<Long> out, DataRowWrapper rowWrapper, IdentifyDescriptor col,
-            FormulaWrapper formula) throws ConvException {
+                              FormulaWrapper formula) throws ConvException {
 
         if (null == rowWrapper) {
             return;
@@ -498,7 +498,19 @@ public class ExcelEngine {
         if (CellType.FORMULA == c.getCellType()) {
             if (null != formula && null != formula.evalor)
                 try {
-                    cv = formula.evalor.evaluate(c);
+                    switch (c.getCachedFormulaResultType()) {
+                        case NUMERIC:
+                            cv = new CellValue(c.getNumericCellValue());
+                            break;
+                        case STRING:
+                            cv = new CellValue(c.getRichStringCellValue().getString());
+                            break;
+                        case BOOLEAN:
+                            cv = new CellValue(c.getBooleanCellValue() ? 1 : 0);
+                            break;
+                        default:
+                            cv = formula.evalor.evaluate(c);
+                    }
                 } catch (Exception e) {
                     ProgramOptions.getLoger().warn(
                             "Evaluate formular failed: %s%s  > File: %s, Table: %s, Row: %d, Column: %d",
@@ -588,7 +600,7 @@ public class ExcelEngine {
      * @return
      */
     static public void cell2d(DataContainer<Double> out, DataRowWrapper rowWrapper, IdentifyDescriptor col,
-            FormulaWrapper formula) throws ConvException {
+                              FormulaWrapper formula) throws ConvException {
 
         if (null == rowWrapper) {
             return;
@@ -713,7 +725,7 @@ public class ExcelEngine {
      * @return
      */
     static public void cell2b(DataContainer<Boolean> out, DataRowWrapper rowWrapper, IdentifyDescriptor col,
-            FormulaWrapper formula) {
+                              FormulaWrapper formula) {
         if (null == rowWrapper) {
             return;
         }
